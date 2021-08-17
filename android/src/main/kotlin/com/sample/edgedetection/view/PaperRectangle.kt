@@ -91,9 +91,10 @@ class PaperRectangle : View {
         cropMode = true
         val width: Double = size?.width ?: 0.0
         val height: Double = size?.height ?: 0.0
-        val altura: Double = distance(corners)
-        Log.i(TAG, "DIAGONAL ------>  $altura diagonal")
-        if (altura < 700 ) {
+
+        val alturamargen = altura(corners)
+        val basemargen = base(corners)
+        if (corners?.corners?.size != 4 && alturamargen < 1000 && basemargen < 1200) {
             tl = org.opencv.core.Point(margin.toDouble(), margin.toDouble())
             tr = org.opencv.core.Point((width - margin).toDouble(), margin.toDouble())
             br = org.opencv.core.Point((width - margin).toDouble(), (height - margin).toDouble())
@@ -127,7 +128,6 @@ class PaperRectangle : View {
             val statusBarHeight = getStatusBarHeight(context)
             val navigationBarHeight = getNavigationBarHeight(context)
             val altura = displayMetrics.heightPixels ?: 1000
-            Log.i(TAG, "ALTURA2 ------>  $altura")
             val margin = altura * .04
             val margin2 = altura * .085
             path.moveTo(margin.toFloat(), margin.toFloat())
@@ -221,17 +221,32 @@ class PaperRectangle : View {
         } else 0
     }
 
-    private fun distance(corners: Corners?): Double {
+    private fun altura(corners: Corners?): Double {
         val corntl = corners?: null
         if (corntl != null) {
-        val tl = corntl.corners[0] ?: org.opencv.core.Point()
-        val br = corntl.corners[3] ?: org.opencv.core.Point()
+            val tl = corntl.corners[0] ?: org.opencv.core.Point()
+            val bl = corntl.corners[3] ?: org.opencv.core.Point()
 
-        val d : Double = sqrt((
-            (tl.x.toFloat()-br.x.toFloat()).pow(2) + 
-            (tl.y.toFloat()-br.y.toFloat()).pow(2)
-            ).toDouble())   
-        return d
+            val d : Double = sqrt((
+                (tl.x.toFloat()-bl.x.toFloat()).pow(2) + 
+                (tl.y.toFloat()-bl.y.toFloat()).pow(2)
+                ).toDouble())   
+            return d
+        }
+        return 0.0
+    }
+
+    private fun base(corners: Corners?): Double {
+        val corntl = corners?: null
+        if (corntl != null) {
+            val tl = corntl.corners[2] ?: org.opencv.core.Point()
+            val bl = corntl.corners[3] ?: org.opencv.core.Point()
+
+            val d : Double = sqrt((
+                (tl.x.toFloat()-bl.x.toFloat()).pow(2) + 
+                (tl.y.toFloat()-bl.y.toFloat()).pow(2)
+                ).toDouble())   
+            return d
         }
         return 0.0
     }
