@@ -9,6 +9,7 @@ import android.graphics.Point
 import android.graphics.Rect
 import android.graphics.YuvImage
 import android.hardware.Camera
+import android.graphics.ImageFormat
 import android.hardware.Camera.ShutterCallback
 import android.os.SystemClock
 import android.media.MediaPlayer
@@ -119,6 +120,8 @@ class ScanPresenter constructor(private val context: Context, private val iView:
         val param = mCamera?.parameters
         val size = getMaxResolution()
         param?.setPreviewSize(size?.width ?: 1920, size?.height ?: 1080)
+        param?.setPictureFormat(ImageFormat.JPEG)
+        param?.setJpegQuality(55)
         val display = iView.getDisplay()
         val point = Point()
         display.getRealSize(point)
