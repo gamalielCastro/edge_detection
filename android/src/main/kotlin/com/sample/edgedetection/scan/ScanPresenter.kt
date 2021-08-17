@@ -121,7 +121,7 @@ class ScanPresenter constructor(private val context: Context, private val iView:
         val size = getMaxResolution()
         param?.setPreviewSize(size?.width ?: 1920, size?.height ?: 1080)
         param?.setPictureFormat(ImageFormat.JPEG)
-        param?.setJpegQuality(55)
+        param?.setJpegQuality(75)
         val display = iView.getDisplay()
         val point = Point()
         display.getRealSize(point)
