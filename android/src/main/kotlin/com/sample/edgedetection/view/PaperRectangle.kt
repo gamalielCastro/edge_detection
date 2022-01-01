@@ -91,20 +91,29 @@ class PaperRectangle : View {
         cropMode = true
         val width: Double = size?.width ?: 0.0
         val height: Double = size?.height ?: 0.0
+        Log.i(TAG, "width " + width)
+        Log.i(TAG, "height " + height)
 
         val alturamargen = altura(corners)
         val basemargen = base(corners)
-        if (corners?.corners?.size != 4 && alturamargen < 1000 && basemargen < 1200) {
-            tl = org.opencv.core.Point(margin.toDouble(), margin.toDouble())
-            tr = org.opencv.core.Point((width - margin).toDouble(), margin.toDouble())
-            br = org.opencv.core.Point((width - margin).toDouble(), (height - margin).toDouble())
-            bl = org.opencv.core.Point(margin.toDouble(), (height - margin).toDouble())
-        } else {
+        if (corners?.corners?.size == 4) {
+            Log.i(TAG, "son 4 ")
             tl = corners?.corners?.get(0) ?: org.opencv.core.Point(margin.toDouble(), margin.toDouble())
             tr = corners?.corners?.get(1) ?: org.opencv.core.Point((width - margin).toDouble(), margin.toDouble())
             br = corners?.corners?.get(2) ?: org.opencv.core.Point((width - margin).toDouble(), (height - margin).toDouble())
             bl = corners?.corners?.get(3) ?: org.opencv.core.Point(margin.toDouble(), (height - margin).toDouble())
+        } else {
+            Log.i(TAG, "NO son 4 ")
+            tl = org.opencv.core.Point(margin.toDouble(), margin.toDouble())
+            tr = org.opencv.core.Point((width - margin).toDouble(), margin.toDouble())
+            br = org.opencv.core.Point((width - margin).toDouble(), (height - margin).toDouble())
+            bl = org.opencv.core.Point(margin.toDouble(), (height - margin).toDouble())
         }
+        if (tr.x.toFloat() == br.x.toFloat() && tr.y.toFloat() == br.y.toFloat()) {
+            tr = org.opencv.core.Point((width - margin).toDouble(), margin.toDouble())
+            br = org.opencv.core.Point((width - margin).toDouble(), (height - margin).toDouble())
+        }
+        
 
         val statusBarHeight = getStatusBarHeight(context)
         val navigationBarHeight = getNavigationBarHeight(context)
